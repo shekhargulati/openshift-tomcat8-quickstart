@@ -1,8 +1,8 @@
 ## Quickstart to run Apache Tomcat 8 on OpenShift##
 
-Apache Tomcat 8 adds support for lots of Java EE 7 features like WebSockets, Servlet 3.1, JSP 2.3, Expression Language 3.0, as well as additional Tomcat-specific features. There is not much documentation around all that will be added in Apache Tomcat 8 but I found this presentation [slides](http://archive.apachecon.com/eu2012/presentations/06-Tuesday/RN-ApacheEE/aceu-2012-tomcat-8-preview.pdf) useful.  Samples running Apache Tomcat 8 on OpenShift can be found at http://tomcat8-cix.rhcloud.com/ and http://tomcat8-cix.rhcloud.com/examples
+Apache Tomcat 8 adds support for lots of Java EE 7 features like WebSockets, Servlet 3.1, JSP 2.3, Expression Language 3.0, as well as additional Tomcat-specific features. There is not much documentation around all that will be added in Apache Tomcat 8 but I found these presentation [slides](http://archive.apachecon.com/eu2012/presentations/06-Tuesday/RN-ApacheEE/aceu-2012-tomcat-8-preview.pdf) useful.  Samples running Apache Tomcat 8 on OpenShift can be found at http://tomcat8-cix.rhcloud.com/ and http://tomcat8-cix.rhcloud.com/examples
 
-1. First create OpenShift diy application with your desired appname (here, using "tomcat8"):
+1. First create an OpenShift DIY application with your desired appname (here, using "tomcat8"):
 ```
 rhc app create tomcat8 diy
 ```
