@@ -1,5 +1,35 @@
 #!/bin/bash
-# The logic to start up your application should be put in this
-# script. The application will work only if it binds to
-# $OPENSHIFT_INTERNAL_IP:8080
-nohup $OPENSHIFT_REPO_DIR/diy/testrubyserver.rb $OPENSHIFT_DIY_IP $OPENSHIFT_REPO_DIR/diy > $OPENSHIFT_DIY_DIR/logs/server.log 2>&1 &
+set -x
+cd $OPENSHIFT_DATA_DIR
+
+if [ -d $OPENSHIFT_DATA_DIR/tomcat8 ]
+then
+	cd tomcat8/bin
+	./startup.sh
+    exit 0
+else
+	mkdir -p source dependencies
+	cd source/
+	git clone https://github.com/apache/tomcat.git
+	cd tomcat/
+	mv build.properties.default build.properties
+	OLD_PATH=/usr/share/java
+	NEW_PATH=../../dependencies
+	sed -i "s|$OLD_PATH|$NEW_PATH|g" build.properties
+	sed -i "s#depends=\"package,build-docs,build-tomcat-jdbc\"#depends=\"package,build-tomcat-jdbc\"#g" build.xml
+	ant clean
+	ant
+	cd $OPENSHIFT_DATA_DIR
+	mkdir tomcat8
+	cd tomcat8
+	cp -r ../source/tomcat/output/build/* .
+	cd conf/
+	ip=$OPENSHIFT_DIY_IP
+	sed -i "s#<Server\s*port=\(\"8005\"\)\(.*\)#<Server address=\"$ip\" port=\"18005\" \2#g" server.xml
+	sed -i "s#<Connector\s*port=\(\"8080\"\)\(.*\)#<Connector address=\"$ip\" port=\"8080\" \2#g;" server.xml
+	sed -i "s#<Connector\s*port=\(\"8009\"\)\(.*\)#<Connector address=\"$ip\" port=\"18009\" \2#g" server.xml
+	sed -i "s#redirectPort=\"8443\"#redirectPort=\"18443\"#g" server.xml
+	cd ../bin
+	./startup.sh
+fi
+
