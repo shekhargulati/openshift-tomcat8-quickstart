@@ -4,10 +4,37 @@ cd $OPENSHIFT_DATA_DIR
 
 if [ -d $OPENSHIFT_DATA_DIR/tomcat8 ]
 then
+    # Java 1.8 set env
+    export PATH=$OPENSHIFT_DATA_DIR/jdk1.8.0_20/bin:$PATH
+    export JAVA_HOME=$OPENSHIFT_DATA_DIR/jdk1.8.0_20/
+
+    # Ant 1.9 set env
+    ANT_HOME=$OPENSHIFT_DATA_DIR/apache-ant-1.9.6
+    ANT_OPTS="-Xms256M -Xmx512M"
+    PATH=$PATH:$HOME/bin:$ANT_HOME/bin
+    export ANT_HOME ANT_OPTS PATH
+
 	cd tomcat8/bin
 	./startup.sh
     exit 0
 else
+    # Java 1.8 Installation and Configuration
+    cd $OPENSHIFT_DATA_DIR
+    wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u20-b26/jdk-8u20-linux-x64.tar.gz
+    tar -zxf jdk-8u20-linux-x64.tar.gz
+    export PATH=$OPENSHIFT_DATA_DIR/jdk1.8.0_20/bin:$PATH
+    export JAVA_HOME=$OPENSHIFT_DATA_DIR/jdk1.8.0_20/
+
+    # Apache Ant Installation and Configuration
+    cd $OPENSHIFT_DATA_DIR
+    wget https://www.apache.org/dist/ant/binaries/apache-ant-1.9.6-bin.zip
+    unzip apache-ant-1.9.6-bin.zip
+    ANT_HOME=$OPENSHIFT_DATA_DIR/apache-ant-1.9.6
+    ANT_OPTS="-Xms256M -Xmx512M"
+    PATH=$PATH:$HOME/bin:$ANT_HOME/bin
+    export ANT_HOME ANT_OPTS PATH
+
+    cd $OPENSHIFT_DATA_DIR
 	mkdir -p source dependencies
 	cd source/
 	git clone https://github.com/apache/tomcat.git
