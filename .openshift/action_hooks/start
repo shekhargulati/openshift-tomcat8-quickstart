@@ -5,8 +5,8 @@ cd $OPENSHIFT_DATA_DIR
 if [ -d $OPENSHIFT_DATA_DIR/tomcat8 ]
 then
     # Java 1.8 set env
-    export PATH=$OPENSHIFT_DATA_DIR/jdk1.8.0_20/bin:$PATH
-    export JAVA_HOME=$OPENSHIFT_DATA_DIR/jdk1.8.0_20/
+    export PATH=$OPENSHIFT_DATA_DIR/jdk1.8.0_72/bin:$PATH
+    export JAVA_HOME=$OPENSHIFT_DATA_DIR/jdk1.8.0_72/
 
     # Ant 1.9 set env
     ANT_HOME=$OPENSHIFT_DATA_DIR/apache-ant-1.9.6
@@ -20,10 +20,11 @@ then
 else
     # Java 1.8 Installation and Configuration
     cd $OPENSHIFT_DATA_DIR
-    wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u20-b26/jdk-8u20-linux-x64.tar.gz
-    tar -zxf jdk-8u20-linux-x64.tar.gz
-    export PATH=$OPENSHIFT_DATA_DIR/jdk1.8.0_20/bin:$PATH
-    export JAVA_HOME=$OPENSHIFT_DATA_DIR/jdk1.8.0_20/
+
+    wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u72-b15/jdk-8u72-linux-x64.tar.gz
+    tar -zxf jdk-8u72-linux-x64.tar.gz
+    export PATH=$OPENSHIFT_DATA_DIR/jdk1.8.0_72/bin:$PATH
+    export JAVA_HOME=$OPENSHIFT_DATA_DIR/jdk1.8.0_72/
 
     # Apache Ant Installation and Configuration
     cd $OPENSHIFT_DATA_DIR
@@ -37,8 +38,8 @@ else
     cd $OPENSHIFT_DATA_DIR
 	mkdir -p source dependencies
 	cd source/
-	git clone https://github.com/apache/tomcat.git
-	cd tomcat/
+	git clone https://github.com/apache/tomcat80.git
+	cd tomcat80/
 	mv build.properties.default build.properties
 	OLD_PATH=/usr/share/java
 	NEW_PATH=../../dependencies
@@ -49,7 +50,7 @@ else
 	cd $OPENSHIFT_DATA_DIR
 	mkdir tomcat8
 	cd tomcat8
-	cp -r ../source/tomcat/output/build/* .
+	cp -r ../source/tomcat80/output/build/* .
 	cd conf/
 	ip=$OPENSHIFT_DIY_IP
 	sed -i "s#<Server\s*port=\(\"8005\"\)\(.*\)#<Server address=\"$ip\" port=\"18005\" \2#g" server.xml
@@ -59,4 +60,5 @@ else
 	cd ../bin
 	./startup.sh
 fi
+
 
