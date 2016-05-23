@@ -28,9 +28,9 @@ else
 
     # Apache Ant Installation and Configuration
     cd $OPENSHIFT_DATA_DIR
-    wget https://www.apache.org/dist/ant/binaries/apache-ant-1.9.6-bin.zip
-    unzip apache-ant-1.9.6-bin.zip
-    ANT_HOME=$OPENSHIFT_DATA_DIR/apache-ant-1.9.6
+    wget https://www.apache.org/dist/ant/binaries/apache-ant-1.9.7-bin.zip
+    unzip apache-ant-1.9.7-bin.zip
+    ANT_HOME=$OPENSHIFT_DATA_DIR/apache-ant-1.9.7
     ANT_OPTS="-Xms256M -Xmx512M"
     PATH=$PATH:$HOME/bin:$ANT_HOME/bin
     export ANT_HOME ANT_OPTS PATH
@@ -41,8 +41,8 @@ else
 	git clone https://github.com/apache/tomcat80.git
 	cd tomcat80/
 	mv build.properties.default build.properties
-	OLD_PATH=/usr/share/java
-	NEW_PATH=../../dependencies
+  OLD_PATH={user.home}/tomcat-build-libs
+	NEW_PATH={user.home}/app-root/data/dependencies
 	sed -i "s|$OLD_PATH|$NEW_PATH|g" build.properties
 	sed -i "s#depends=\"package,build-docs,build-tomcat-jdbc\"#depends=\"package,build-tomcat-jdbc\"#g" build.xml
 	ant clean
@@ -60,5 +60,3 @@ else
 	cd ../bin
 	./startup.sh
 fi
-
-
