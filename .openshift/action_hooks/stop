@@ -1,4 +1,4 @@
 #!/bin/bash
 
-kill `ps -ef | grep tomcat | grep -v grep | awk '{ print $2 }'` > /dev/null 2>&1
+$OPENSHIFT_DATA_DIR/tomcat8/bin/shutdown.sh
 exit 0
