@@ -16,7 +16,10 @@ cd tomcat8
 git remote add upstream https://github.com/shekhargulati/openshift-tomcat8-quickstart.git
 git pull -s recursive -X theirs upstream master
 ```
-
+If you get an error saying ```fatal: refusing to merge unrelated histories``` use
+```
+git pull -s recursive -X theirs upstream master --allow-unrelated-histories
+```
 3. Push the code to OpenShift. 
 ```
 git push
