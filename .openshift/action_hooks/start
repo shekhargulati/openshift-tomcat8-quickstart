@@ -5,8 +5,8 @@ cd $OPENSHIFT_DATA_DIR
 if [ -d $OPENSHIFT_DATA_DIR/tomcat8 ]
 then
     # Java 1.8 set env
-    export PATH=$OPENSHIFT_DATA_DIR/jdk1.8.0_72/bin:$PATH
-    export JAVA_HOME=$OPENSHIFT_DATA_DIR/jdk1.8.0_72/
+    export JAVA_HOME=/etc/alternatives/java_sdk_1.8.0
+    export PATH=$JAVA_HOME/bin:$PATH
 
     # Ant 1.9 set env
     ANT_HOME=$OPENSHIFT_DATA_DIR/apache-ant-1.9.6
@@ -18,13 +18,10 @@ then
 	./startup.sh
     exit 0
 else
-    # Java 1.8 Installation and Configuration
+    # Java 1.8 Configuration
     cd $OPENSHIFT_DATA_DIR
-
-    wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u72-b15/jdk-8u72-linux-x64.tar.gz
-    tar -zxf jdk-8u72-linux-x64.tar.gz
-    export PATH=$OPENSHIFT_DATA_DIR/jdk1.8.0_72/bin:$PATH
-    export JAVA_HOME=$OPENSHIFT_DATA_DIR/jdk1.8.0_72/
+    export JAVA_HOME=/etc/alternatives/java_sdk_1.8.0
+    export PATH=$JAVA_HOME/bin:$PATH
 
     # Apache Ant Installation and Configuration
     cd $OPENSHIFT_DATA_DIR
