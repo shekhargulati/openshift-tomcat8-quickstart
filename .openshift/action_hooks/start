@@ -8,52 +8,52 @@ then
     export JAVA_HOME=/etc/alternatives/java_sdk_1.8.0
     export PATH=$JAVA_HOME/bin:$PATH
 
-    # Ant 1.9 set env
-    ANT_HOME=$OPENSHIFT_DATA_DIR/apache-ant-1.9.6
-    ANT_OPTS="-Xms256M -Xmx512M"
-    PATH=$PATH:$HOME/bin:$ANT_HOME/bin
-    export ANT_HOME ANT_OPTS PATH
-
-	cd tomcat8/bin
-	./startup.sh
+    cd tomcat8/bin
+    ./startup.sh
+    
     exit 0
 else
-    # Java 1.8 Configuration
+    # Java 1.8 set env
     cd $OPENSHIFT_DATA_DIR
     export JAVA_HOME=/etc/alternatives/java_sdk_1.8.0
     export PATH=$JAVA_HOME/bin:$PATH
 
     # Apache Ant Installation and Configuration
     cd $OPENSHIFT_DATA_DIR
-    wget https://www.apache.org/dist/ant/binaries/apache-ant-1.9.7-bin.zip
-    unzip apache-ant-1.9.7-bin.zip
-    ANT_HOME=$OPENSHIFT_DATA_DIR/apache-ant-1.9.7
+    wget https://www.apache.org/dist/ant/binaries/apache-ant-1.10.1-bin.zip
+    unzip apache-ant-1.10.1-bin.zip
+    ANT_HOME=$OPENSHIFT_DATA_DIR/apache-ant-1.10.1
     ANT_OPTS="-Xms256M -Xmx512M"
     PATH=$PATH:$HOME/bin:$ANT_HOME/bin
     export ANT_HOME ANT_OPTS PATH
-
+    
+    # Apache Tomcat Building
     cd $OPENSHIFT_DATA_DIR
-	mkdir -p source dependencies
-	cd source/
-	git clone https://github.com/apache/tomcat80.git
-	cd tomcat80/
-	mv build.properties.default build.properties
-  OLD_PATH={user.home}/tomcat-build-libs
-	NEW_PATH={user.home}/app-root/data/dependencies
-	sed -i "s|$OLD_PATH|$NEW_PATH|g" build.properties
-	sed -i "s#depends=\"package,build-docs,build-tomcat-jdbc\"#depends=\"package,build-tomcat-jdbc\"#g" build.xml
-	ant clean
-	ant
-	cd $OPENSHIFT_DATA_DIR
-	mkdir tomcat8
-	cd tomcat8
-	cp -r ../source/tomcat80/output/build/* .
-	cd conf/
-	ip=$OPENSHIFT_DIY_IP
-	sed -i "s#<Server\s*port=\(\"8005\"\)\(.*\)#<Server address=\"$ip\" port=\"18005\" \2#g" server.xml
-	sed -i "s#<Connector\s*port=\(\"8080\"\)\(.*\)#<Connector address=\"$ip\" port=\"8080\" \2#g;" server.xml
-	sed -i "s#<Connector\s*port=\(\"8009\"\)\(.*\)#<Connector address=\"$ip\" port=\"18009\" \2#g" server.xml
-	sed -i "s#redirectPort=\"8443\"#redirectPort=\"18443\"#g" server.xml
-	cd ../bin
-	./startup.sh
+    mkdir -p source dependencies
+    cd source/
+    git clone https://github.com/apache/tomcat85.git
+    cd tomcat85/
+    mv build.properties.default build.properties
+    OLD_PATH={user.home}/tomcat-build-libs
+    NEW_PATH={user.home}/app-root/data/dependencies
+    sed -i "s|$OLD_PATH|$NEW_PATH|g" build.properties
+    sed -i "s#depends=\"package,build-docs,build-tomcat-jdbc\"#depends=\"package,build-tomcat-jdbc\"#g" build.xml
+    ant clean
+    ant
+    cd $OPENSHIFT_DATA_DIR
+    mkdir tomcat8
+    cd tomcat8
+    cp -r ../source/tomcat85/output/build/* .
+    cd conf/
+    ip=$OPENSHIFT_DIY_IP
+    sed -i "s#<Server\s*port=\(\"8005\"\)\(.*\)#<Server address=\"$ip\" port=\"18005\" \2#g" server.xml
+    sed -i "s#<Connector\s*port=\(\"8080\"\)\(.*\)#<Connector address=\"$ip\" port=\"8080\" \2#g;" server.xml
+    sed -i "s#<Connector\s*port=\(\"8009\"\)\(.*\)#<Connector address=\"$ip\" port=\"18009\" \2#g" server.xml	
+    sed -i "s#redirectPort=\"8443\"#redirectPort=\"18443\"#g" server.xml
+    cd ../bin	
+    ./startup.sh
+    
+    # Removing Tomcat source and Ant
+    rm -rf $OPENSHIFT_DATA_DIR/source
+    rm -rf $OPENSHIFT_DATA_DIR/apache-ant-1.10.1
 fi
